@@ -1,0 +1,141 @@
+# MiniShell
+
+MiniShell 是一个用 C++ 实现的简单命令行 shell 程序，模仿 Linux 系统中常见的 shell 功能。它支持执行外部命令、内建命令（如 `cd` 和 `exit`），并提供基本的输入解析和命令执行机制。
+
+## 目录结构
+
+```plaintext
+MiniShell/
+├── include/              # 头文件
+│   ├── executor.h        # 外部命令执行和内建命令处理
+│   ├── parser.h          # 输入解析相关函数
+│   └── shell.h           # Shell 主体函数声明
+├── src/                  # 源代码文件
+│   ├── main.cpp          # 程序入口，初始化并启动 Shell
+│   ├── executor.cpp      # 外部命令执行和内建命令处理的实现
+│   ├── parser.cpp        # 输入解析实现
+│   └── shell.cpp         # Shell 核心逻辑，命令执行与输入解析
+├── obj/                  # 编译生成的目标文件
+├── Makefile              # 项目构建文件
+└── README.md             # 项目的 README 文件
+```
+
+## 功能
+
+### 1. **执行外部命令**
+
+MiniShell 可以执行系统中存在的外部命令（如 `ls`, `pwd`, `cat` 等）。它通过 `execvp()` 函数来启动新进程并执行命令。
+
+### 2. **内建命令支持**
+
+MiniShell 支持以下内建命令：
+- `cd [dir]`: 切换当前工作目录。
+- `exit`: 退出 MiniShell。
+
+### 3. **命令行输入解析**
+
+MiniShell 通过解析用户输入来提取命令及其参数。使用 `splitInput()` 函数进行输入的拆分，并通过 `parseInput()` 来处理命令。
+
+### 4. **命令提示符**
+
+MiniShell 提供一个命令提示符，提示用户可以输入命令。提示符形式为 `MiniShell>`。
+
+## 使用说明
+
+### 1. **编译和安装**
+
+首先，克隆项目到本地并进入项目目录：
+
+```bash
+git clone https://github.com/Acany330/mini_shell
+cd MiniShell
+```
+
+然后，使用 `make` 命令来编译项目：
+
+```bash
+make
+```
+
+编译完成后，将生成 `mini_shell` 可执行文件。
+
+### 2. **运行**
+
+编译完成后，可以通过以下命令启动 MiniShell：
+
+```bash
+./mini_shell
+```
+
+启动后，命令行提示符 `MiniShell>` 会显示，你可以输入命令。
+
+### 3. **命令示例**
+
+- 切换目录：
+  ```bash
+  MiniShell> cd /home/user/Documents
+  ```
+- 执行外部命令：
+  ```bash
+  MiniShell> ls -l
+  ```
+- 退出 MiniShell：
+  ```bash
+  MiniShell> exit
+  ```
+
+## 设计与实现
+
+MiniShell 采用了分层架构，主要分为以下几部分：
+
+- **输入解析**：用户输入的命令通过 `splitInput()` 和 `parseInput()` 进行解析，将字符串分解成命令和参数列表。
+- **命令执行**：根据解析结果，程序决定执行内建命令还是外部命令。内建命令如 `cd` 和 `exit` 直接在当前进程中执行，而外部命令则会通过 `fork()` 和 `execvp()` 创建子进程执行。
+- **内存管理**：MiniShell 使用 `std::vector<std::string>` 来存储命令参数，并且对输入和输出进行了适当的内存管理。
+
+## 测试用例
+
+### 1. **测试 `cd` 命令**
+
+```bash
+MiniShell> cd /home/user/Documents
+```
+
+测试切换目录的功能。
+
+### 2. **测试 `exit` 命令**
+
+```bash
+MiniShell> exit
+```
+
+测试退出 MiniShell 是否能正常工作。
+
+### 3. **测试外部命令**
+
+```bash
+MiniShell> ls -l
+```
+
+测试执行 `ls` 命令是否能列出目录内容。
+
+### 4. **测试无效命令**
+
+```bash
+MiniShell> unknown_command
+```
+
+测试执行不存在的命令时是否能正确处理并输出错误信息。
+
+## 贡献
+
+欢迎提交问题报告或贡献代码！
+
+### 提交问题
+
+如果你在使用 MiniShell 时遇到问题，欢迎在 GitHub 上提交 issue，我们将尽力解决。
+
+### 贡献代码
+
+1. Fork 这个项目。
+2. 在你自己的仓库上进行更改。
+3. 提交 Pull Request，将更改贡献回原始仓库。
