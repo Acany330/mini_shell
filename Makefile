@@ -12,7 +12,7 @@ $(OUT): $(OBJ)
 	$(CXX) $(OBJ) -o $(OUT)
 
 # 编译 .cpp 文件为 .o 文件
-obj/%.o: src/%.cpp
+obj/%.o: src
 	@mkdir -p obj
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
